@@ -1,0 +1,7 @@
+ELEMENT_SIZE = 150
+NUMBER_X, NUMBER_Y = 4, 4
+
+# Colors
+BLACK = (0, 0, 0)
+ORANGE = (255, 165, 0)
+WHITE = (255, 255, 255)
