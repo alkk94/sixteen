@@ -5,6 +5,10 @@ import random
 
 
 class Game:
+    # Sounds
+    pygame.mixer.init()
+    CORRECT_AREA_SOUND = pygame.mixer.Sound("correct_area.wav")
+
     @staticmethod
     def get_board():
         numbers = []
@@ -53,6 +57,7 @@ class Game:
             scaled_position = position[0] // ELEMENT_SIZE, position[1] // ELEMENT_SIZE
             if self.board[scaled_position[0]][scaled_position[1]] and \
                     self.board[scaled_position[0]][scaled_position[1]].is_next_area(self.next_number):
+                Game.CORRECT_AREA_SOUND.play()
                 self.next_number += 1
                 self.board[scaled_position[0]][scaled_position[1]] = None
                 if self.is_win():
