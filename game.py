@@ -5,12 +5,6 @@ import random
 
 
 class Game:
-    # Game parameters
-    FPS = 60
-    GAME_WIDTH, GAME_HEIGHT = NUMBER_X * ELEMENT_SIZE, NUMBER_Y * ELEMENT_SIZE
-    RESOLUTION = GAME_WIDTH, GAME_HEIGHT
-    pygame.init()
-
     @staticmethod
     def get_board():
         numbers = []
@@ -27,9 +21,8 @@ class Game:
             board.append(areas)
         return board
 
-    def __init__(self):
-        self.screen = pygame.display.set_mode(Game.RESOLUTION)
-        self.clock = pygame.time.Clock()
+    def __init__(self, screen):
+        self.screen = screen
         self.run = True
         self.board = Game.get_board()
         self.next_number = 1
@@ -39,18 +32,12 @@ class Game:
     def execute(self):
         while self.run:
             self.handle_events()
-            self.ticking()
             self.draw()
 
     def handle_events(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.run = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_click_event()
-
-    def ticking(self):
-        self.clock.tick(Game.FPS)
 
     def draw(self):
         self.screen.fill(BLACK)
@@ -63,14 +50,13 @@ class Game:
     def handle_click_event(self):
         if pygame.mouse.get_pressed()[0]:
             position = pygame.mouse.get_pos()
-            position = position[0] // ELEMENT_SIZE, position[1] // ELEMENT_SIZE
-            if self.board[position[0]][position[1]] and \
-                    self.board[position[0]][position[1]].is_next_area(self.next_number):
+            scaled_position = position[0] // ELEMENT_SIZE, position[1] // ELEMENT_SIZE
+            if self.board[scaled_position[0]][scaled_position[1]] and \
+                    self.board[scaled_position[0]][scaled_position[1]].is_next_area(self.next_number):
                 self.next_number += 1
-                self.board[position[0]][position[1]] = None
+                self.board[scaled_position[0]][scaled_position[1]] = None
                 if self.is_win():
                     self.run = False
-                    print(pygame.time.get_ticks() / 1000)
 
     def is_win(self):
         return self.next_number == NUMBER_X * NUMBER_Y + 1
